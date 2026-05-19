@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "fixture": true,
+  "materialBoundaries": [
+    {
+      "id": "synthetic-only",
+      "boundary": "synthetic",
+      "description": "All research notes, claims, and manuscript text were created for this fixture.",
+      "containsPrivateMaterial": false,
+      "requiresNetworkAccess": false,
+      "reuseLimit": "Fixture smoke tests and documentation examples only."
+    }
+  ]
+}

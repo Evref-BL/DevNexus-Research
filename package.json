@@ -1,0 +1,47 @@
+{
+  "name": "@evref-bl/dev-nexus-research",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "license": "CC-BY-NC-4.0",
+  "description": "Research and LaTeX paper-writing workflow plugin for DevNexus.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "docs",
+    "fixtures",
+    "skills",
+    "LICENSE",
+    "NOTICE.md",
+    "README.md",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Evref-BL/DevNexus-Research.git"
+  },
+  "homepage": "https://github.com/Evref-BL/DevNexus-Research#readme",
+  "bugs": {
+    "url": "https://github.com/Evref-BL/DevNexus-Research/issues"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "check": "npm run build && npm test"
+  },
+  "dependencies": {
+    "dev-nexus": "npm:@evref-bl/dev-nexus@0.1.0-alpha.16"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  }
+}

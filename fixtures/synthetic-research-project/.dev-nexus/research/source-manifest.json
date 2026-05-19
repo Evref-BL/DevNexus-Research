@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "fixture": true,
+  "materialPolicy": {
+    "networkAccess": false,
+    "privateMaterial": false,
+    "allowedMaterialBoundaries": ["synthetic", "public-open"]
+  },
+  "sources": [
+    {
+      "id": "synthetic-method-note",
+      "title": "Synthetic Method Note",
+      "kind": "project-note",
+      "materialBoundary": "synthetic",
+      "path": "sources/synthetic-method-note.md",
+      "citationKey": "synthetic2026method",
+      "provenance": "Created inside this fixture to avoid private or external paper material.",
+      "included": true
+    },
+    {
+      "id": "synthetic-related-work-note",
+      "title": "Synthetic Related Work Placeholder",
+      "kind": "project-note",
+      "materialBoundary": "synthetic",
+      "path": "sources/synthetic-related-work-note.md",
+      "citationKey": "synthetic2026related",
+      "provenance": "Created inside this fixture as a placeholder for citation-key and bibliography checks.",
+      "included": true
+    }
+  ]
+}

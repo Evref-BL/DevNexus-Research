@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "bibliographyFiles": ["paper/references.bib"],
+  "citationKeys": ["synthetic2026method", "synthetic2026related"],
+  "localToolingRequired": false,
+  "notes": ["Fixture bibliography is synthetic and used only for path and citation-key checks."]
+}
