@@ -1,0 +1,14 @@
+# DevNexus project/control-plane files belong in the parent project root,
+# not in this package source repository.
+/.codex/
+/.dev-nexus/
+/AGENTS.md
+/CONTEXT.md
+/PLAN.md
+/components/
+/dev-nexus.project.json
+/worktrees/
+
+coverage/
+dist/
+node_modules/

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "fixture": true,
+  "claims": [
+    {
+      "id": "claim-001",
+      "text": "The fixture declares DevNexus-Research artifact paths and can render setup status without external services.",
+      "support": ["synthetic-method-note"],
+      "status": "supported-by-fixture",
+      "risk": "low"
+    },
+    {
+      "id": "claim-002",
+      "text": "The fixture includes a minimal LaTeX manuscript root and bibliography file.",
+      "support": ["synthetic-related-work-note"],
+      "status": "supported-by-fixture",
+      "risk": "low"
+    }
+  ]
+}

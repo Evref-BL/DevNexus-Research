@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "id": "synthetic-research-project",
+  "name": "Synthetic Research Project",
+  "home": null,
+  "repo": {
+    "kind": "local",
+    "remoteUrl": null,
+    "defaultBranch": "main"
+  },
+  "worktreesRoot": ".dev-nexus/worktrees",
+  "components": [
+    {
+      "id": "synthetic-paper",
+      "name": "Synthetic Paper",
+      "kind": "local",
+      "role": "primary",
+      "sourceRoot": ".",
+      "worktreesRoot": ".dev-nexus/worktrees/synthetic-paper",
+      "relationships": []
+    }
+  ],
+  "plugins": [
+    {
+      "id": "dev-nexus-research",
+      "name": "DevNexus Research",
+      "version": "0.1.0-alpha.0",
+      "enabled": true,
+      "capabilities": []
+    }
+  ],
+  "extensions": {
+    "dev-nexus-research": {
+      "artifacts": {
+        "artifactRoot": ".dev-nexus/research",
+        "paths": {
+          "research-brief": ".dev-nexus/research/research-brief.md",
+          "source-manifest": ".dev-nexus/research/source-manifest.json",
+          "material-passport": ".dev-nexus/research/material-passport.json",
+          "claim-register": ".dev-nexus/research/claim-register.json",
+          "latex-manuscript-root": "paper/main.tex",
+          "latex-bibliography-files": "paper/references.bib",
+          "latex-figure-paths": "paper/figures",
+          "latex-table-paths": "paper/tables",
+          "bibliography-state": ".dev-nexus/research/bibliography-state.json",
+          "latex-build-report": ".dev-nexus/research/latex-build-report.md",
+          "review-package": ".dev-nexus/research/review-package.md",
+          "revision-matrix": ".dev-nexus/research/revision-matrix.md",
+          "export-decision": ".dev-nexus/research/export-decision.md"
+        }
+      },
+      "setup": {
+        "requireLocalLatexCompilation": false,
+        "externalIndexProfiles": []
+      },
+      "materialPolicy": {
+        "networkAccess": false,
+        "privateMaterial": false,
+        "allowedMaterialBoundaries": ["synthetic", "public-open"]
+      }
+    }
+  }
+}

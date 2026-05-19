@@ -1,0 +1,39 @@
+{
+  "upstreamRepositoryUrl": "https://github.com/Imbad0202/academic-research-skills",
+  "upstreamCommit": "af09cf54c1db55cb10148e0f11db94c389f8214d",
+  "upstreamAuthor": "Cheng-I Wu",
+  "upstreamLicense": "CC-BY-NC-4.0",
+  "upstreamLicenseTextPath": "LICENSE",
+  "upstreamLicenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "noEndorsement": "DevNexus-Research does not imply endorsement by Cheng-I Wu or by the upstream Academic Research Skills project.",
+  "skills": [
+    {
+      "skillId": "deep-research",
+      "relationship": "adapted-from",
+      "upstreamSourcePath": "deep-research/SKILL.md",
+      "upstreamContentSha256": "527f7500420bc4872bd9a64f40e9b036ee825dc3a60eca49d6cdb7a1a06ef39d",
+      "modificationNotes": "Adapted into a self-contained DevNexus-Research skill with DevNexus artifact names, human checkpoints, and no dependency on external ARS reference files."
+    },
+    {
+      "skillId": "academic-paper",
+      "relationship": "adapted-from",
+      "upstreamSourcePath": "academic-paper/SKILL.md",
+      "upstreamContentSha256": "2578aaf434336672071558ac2a5872fe998e48f7c610510723f3b7ec78fe3aae",
+      "modificationNotes": "Adapted into a self-contained DevNexus-Research paper-writing skill with LaTeX artifact conventions and no dependency on external ARS reference files."
+    },
+    {
+      "skillId": "academic-paper-reviewer",
+      "relationship": "adapted-from",
+      "upstreamSourcePath": "academic-paper-reviewer/SKILL.md",
+      "upstreamContentSha256": "7b594fdd5812e5d80ce094c420f14aa5e0759fe12567adea1c4d8edad7e71a36",
+      "modificationNotes": "Adapted into a self-contained DevNexus-Research review skill with read-only review posture and DevNexus review-package outputs."
+    },
+    {
+      "skillId": "academic-pipeline",
+      "relationship": "adapted-from",
+      "upstreamSourcePath": "academic-pipeline/SKILL.md",
+      "upstreamContentSha256": "cce007ae745b44b4bea69e331a51b07eacecf4cf234c29875387bc38266d0579",
+      "modificationNotes": "Adapted into a self-contained DevNexus-Research pipeline skill that dispatches bundled skills and records DevNexus artifacts instead of relying on an external ARS checkout."
+    }
+  ]
+}
