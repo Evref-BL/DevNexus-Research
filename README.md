@@ -82,7 +82,8 @@ Current state:
 - Setup helpers can load artifact paths, local LaTeX compilation requirements,
   and external index profiles from a DevNexus project extension.
 - Packaged installs include the README-referenced docs in `docs/`.
-- Package metadata is private until a publication decision is made.
+- Package metadata is configured for public npm publication under
+  `@evref-bl/dev-nexus-research`.
 - The license posture is materialized as `CC-BY-NC-4.0`, making the package
   free and noncommercial rather than commercial-safe or OSI-open-source.
 
