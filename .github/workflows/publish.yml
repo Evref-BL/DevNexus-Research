@@ -11,6 +11,9 @@ on:
         options:
           - dogfood
           - latest
+  repository_dispatch:
+    types:
+      - publish-npm
 
 permissions:
   contents: read
@@ -46,6 +49,23 @@ jobs:
           echo "name=$(node -p "require('./package.json').name")" >> "$GITHUB_OUTPUT"
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
+      - name: Resolve npm dist-tag
+        id: dist-tag
+        env:
+          WORKFLOW_DIST_TAG: ${{ inputs.dist_tag }}
+          DISPATCH_DIST_TAG: ${{ github.event.client_payload.dist_tag }}
+        run: |
+          dist_tag="${WORKFLOW_DIST_TAG:-${DISPATCH_DIST_TAG:-dogfood}}"
+          case "$dist_tag" in
+            dogfood|latest)
+              echo "value=$dist_tag" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "::error::Unsupported npm dist-tag: $dist_tag"
+              exit 1
+              ;;
+          esac
+
       - name: Check package version is not published
         run: |
           if npm view "${{ steps.package.outputs.name }}@${{ steps.package.outputs.version }}" version --json > /tmp/npm-version.json 2>/dev/null; then
@@ -64,5 +84,5 @@ jobs:
 
       - name: Publish to npm
         env:
-          NPM_DIST_TAG: ${{ inputs.dist_tag }}
+          NPM_DIST_TAG: ${{ steps.dist-tag.outputs.value }}
         run: npm publish --access public --tag "$NPM_DIST_TAG"
