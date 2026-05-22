@@ -42,7 +42,7 @@ autonomous paper-writing system.
 
 ## Non-Goals
 
-- Do not implement inside the DevNexus dogfood project.
+- Do not implement inside a separate DevNexus self-hosting workspace.
 - Do not copy or adapt ARS material outside the approved `CC-BY-NC-4.0`
   DevNexus-Research license posture.
 - Do not add research-specific behavior to DevNexus core.
@@ -247,7 +247,7 @@ This project remains the owning project for the plugin:
 - Work items are local to this project until a GitHub tracker is explicitly
   configured.
 - Implementation worktrees are prepared from this project.
-- DevNexus dogfood can later consume the plugin, but should not own its
+- DevNexus self-hosting workspaces can later consume the plugin, but should not own its
   planning or implementation.
 
 ## Implementation Plan
