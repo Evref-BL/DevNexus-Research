@@ -6,10 +6,10 @@ on:
       dist_tag:
         description: npm dist-tag to publish under
         required: true
-        default: dogfood
+        default: alpha
         type: choice
         options:
-          - dogfood
+          - alpha
           - latest
   repository_dispatch:
     types:
@@ -55,9 +55,9 @@ jobs:
           WORKFLOW_DIST_TAG: ${{ inputs.dist_tag }}
           DISPATCH_DIST_TAG: ${{ github.event.client_payload.dist_tag }}
         run: |
-          dist_tag="${WORKFLOW_DIST_TAG:-${DISPATCH_DIST_TAG:-dogfood}}"
+          dist_tag="${WORKFLOW_DIST_TAG:-${DISPATCH_DIST_TAG:-alpha}}"
           case "$dist_tag" in
-            dogfood|latest)
+            alpha|latest)
               echo "value=$dist_tag" >> "$GITHUB_OUTPUT"
               ;;
             *)
