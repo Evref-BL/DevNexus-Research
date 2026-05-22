@@ -1,7 +1,7 @@
 {
   "name": "@evref-bl/dev-nexus-research",
   "version": "0.1.0-alpha.0",
-  "private": true,
+  "private": false,
   "license": "CC-BY-NC-4.0",
   "description": "Research and LaTeX paper-writing workflow plugin for DevNexus.",
   "type": "module",
@@ -30,6 +30,9 @@
   "homepage": "https://github.com/Evref-BL/DevNexus-Research#readme",
   "bugs": {
     "url": "https://github.com/Evref-BL/DevNexus-Research/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=24"
