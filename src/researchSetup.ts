@@ -264,19 +264,19 @@ function optionalArtifactConfig(value: unknown): DevNexusResearchArtifactConfig 
   };
 }
 
+function definedSetupOptions(options: DevNexusResearchSetupOptions): DevNexusResearchSetupOptions {
+  return Object.fromEntries(
+    Object.entries(options).filter(([, value]) => value !== undefined),
+  ) as DevNexusResearchSetupOptions;
+}
+
 function mergeSetupOptions(
   base: DevNexusResearchSetupOptions,
   override: DevNexusResearchSetupOptions,
 ): DevNexusResearchSetupOptions {
   return {
-    ...base,
-    ...override,
-    artifacts: override.artifacts ?? base.artifacts,
-    commandPresence: override.commandPresence ?? base.commandPresence,
-    commandSearchPath: override.commandSearchPath ?? base.commandSearchPath,
-    externalIndexProfiles: override.externalIndexProfiles ?? base.externalIndexProfiles,
-    externalSkills: override.externalSkills ?? base.externalSkills,
-    externalSkillAvailability: override.externalSkillAvailability ?? base.externalSkillAvailability,
+    ...definedSetupOptions(base),
+    ...definedSetupOptions(override),
   };
 }
 
