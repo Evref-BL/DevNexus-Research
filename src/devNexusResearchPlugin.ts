@@ -27,6 +27,18 @@ export const devNexusResearchPluginCapabilities: NexusPluginCapabilityRecord[] =
     }),
   ),
   {
+    kind: "dependency_projection",
+    id: "node-modules",
+    description:
+      "Project existing Node package dependencies into Research worktrees when available.",
+    source: "node_modules",
+    target: "node_modules",
+    required: false,
+    sourceControl: "support",
+    reason:
+      "Let Research package worktrees use local package scripts and binaries without installing dependencies in generated worktrees.",
+  },
+  {
     kind: "setup_obligation",
     id: "setup:baseline-artifacts",
     description: paragraph(
