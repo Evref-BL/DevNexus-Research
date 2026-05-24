@@ -1,19 +1,23 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { projectPluginCapabilityProjections, projectPluginWorkerFragments } from "dev-nexus";
+import {
+  projectPluginCapabilityProjections,
+  projectPluginDependencyProjections,
+  projectPluginWorkerFragments,
+} from "dev-nexus";
 import {
   devNexusResearchArsCodexRepositoryUrl,
   devNexusResearchArsIntegrationPlanForProvider,
   devNexusResearchArsProviderIntegrations,
-} from "./arsProviderIntegrations.js";
+} from "../src/arsProviderIntegrations.js";
 import {
   devNexusResearchDevNexusPluginConfig,
   devNexusResearchPluginCapabilities,
   devNexusResearchPluginId,
   devNexusResearchPluginName,
   devNexusResearchPluginVersion,
-} from "./devNexusResearchPlugin.js";
+} from "../src/devNexusResearchPlugin.js";
 import {
   devNexusResearchArsNoEndorsementNotice,
   devNexusResearchArsSkillProvenance,
@@ -22,12 +26,12 @@ import {
   devNexusResearchLicense,
   devNexusResearchLicenseTextPath,
   devNexusResearchLicenseUrl,
-} from "./researchSkillProvenance.js";
+} from "../src/researchSkillProvenance.js";
 import {
   devNexusResearchSkillById,
   devNexusResearchSkillIds,
   devNexusResearchSkills,
-} from "./researchSkills.js";
+} from "../src/researchSkills.js";
 
 describe("DevNexus Research plugin", () => {
   it("declares a stable initial plugin identity", () => {
@@ -52,10 +56,40 @@ describe("DevNexus Research plugin", () => {
       capabilityCount: devNexusResearchPluginCapabilities.length,
     });
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("projected_skill");
+    expect(projection.capabilities.map((capability) => capability.kind)).toContain("dependency_projection");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("setup_obligation");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("environment_hint");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("agent_affordance");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("worker_briefing_fragment");
+  });
+
+  it("projects existing Node dependencies into generated Research worktrees when available", () => {
+    expect(
+      projectPluginDependencyProjections({
+        plugins: [devNexusResearchDevNexusPluginConfig()],
+      }),
+    ).toEqual([
+      {
+        kind: "dependency_projection",
+        id: "node-modules",
+        description:
+          "Project existing Node package dependencies into Research worktrees when available.",
+        source: "node_modules",
+        target: "node_modules",
+        required: false,
+        sourceControl: "support",
+        targetAgents: [],
+        targetComponents: [],
+        reason:
+          "Let Research package worktrees use local package scripts and binaries without installing dependencies in generated worktrees.",
+        pluginSource: {
+          pluginId: "dev-nexus-research",
+          pluginName: "DevNexus Research",
+          version: devNexusResearchPluginVersion,
+          capabilityId: "node-modules",
+        },
+      },
+    ]);
   });
 
   it("projects all bundled research skills", () => {

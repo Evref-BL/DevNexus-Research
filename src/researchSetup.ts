@@ -1,4 +1,5 @@
-import { spawnSync } from "node:child_process";
+import { accessSync, constants } from "node:fs";
+import { delimiter, join } from "node:path";
 import type { NexusProjectConfig } from "dev-nexus";
 import {
   type DevNexusResearchArtifactConfig,
@@ -61,6 +62,7 @@ export interface DevNexusResearchExternalProfileConfig {
 export interface DevNexusResearchSetupOptions {
   artifacts?: DevNexusResearchArtifactConfig;
   commandPresence?: Record<string, boolean>;
+  commandSearchPath?: string;
   requiredArtifactIds?: string[];
   requireLocalLatexCompilation?: boolean;
   requiredLatexTools?: string[];
@@ -106,19 +108,70 @@ const defaultDocumentExportTools = ["pandoc"];
 const defaultBibliographyTools = ["zotero"];
 const defaultCorpusAdapters = ["zotero", "obsidian"];
 
-function quoteShellArg(value: string): string {
-  return `'${value.replace(/'/g, "'\\''")}'`;
+function isCommandNameCharacter(char: string): boolean {
+  return (
+    (char >= "a" && char <= "z") ||
+    (char >= "A" && char <= "Z") ||
+    (char >= "0" && char <= "9") ||
+    char === "." ||
+    char === "_" ||
+    char === "+" ||
+    char === "-"
+  );
 }
 
-function commandExists(command: string, commandPresence?: Record<string, boolean>): boolean {
+function isCommandName(command: string): boolean {
+  if (command.length === 0) {
+    return false;
+  }
+
+  for (const char of command) {
+    if (!isCommandNameCharacter(char)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function executableCandidateNames(command: string): string[] {
+  if (process.platform !== "win32") {
+    return [command];
+  }
+
+  const extensions = (process.env.PATHEXT ?? ".COM;.EXE;.BAT;.CMD")
+    .split(";")
+    .filter((extension) => extension.length > 0);
+  return [command, ...extensions.map((extension) => `${command}${extension}`)];
+}
+
+function executableExists(filePath: string): boolean {
+  try {
+    accessSync(filePath, constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function commandExists(
+  command: string,
+  commandPresence?: Record<string, boolean>,
+  commandSearchPath = process.env.PATH ?? "",
+): boolean {
   if (commandPresence && command in commandPresence) {
     return commandPresence[command] === true;
   }
 
-  const result = spawnSync("sh", ["-lc", `command -v ${quoteShellArg(command)}`], {
-    stdio: "ignore",
-  });
-  return result.status === 0;
+  if (!isCommandName(command)) {
+    return false;
+  }
+
+  const directories = commandSearchPath.split(delimiter).filter((directory) => directory.length > 0);
+  const candidates = executableCandidateNames(command);
+  return directories.some((directory) =>
+    candidates.some((candidate) => executableExists(join(directory, candidate))),
+  );
 }
 
 function setupItemStatus(present: boolean, required: boolean): DevNexusResearchSetupItemStatus {
@@ -211,18 +264,19 @@ function optionalArtifactConfig(value: unknown): DevNexusResearchArtifactConfig 
   };
 }
 
+function definedSetupOptions(options: DevNexusResearchSetupOptions): DevNexusResearchSetupOptions {
+  return Object.fromEntries(
+    Object.entries(options).filter(([, value]) => value !== undefined),
+  ) as DevNexusResearchSetupOptions;
+}
+
 function mergeSetupOptions(
   base: DevNexusResearchSetupOptions,
   override: DevNexusResearchSetupOptions,
 ): DevNexusResearchSetupOptions {
   return {
-    ...base,
-    ...override,
-    artifacts: override.artifacts ?? base.artifacts,
-    commandPresence: override.commandPresence ?? base.commandPresence,
-    externalIndexProfiles: override.externalIndexProfiles ?? base.externalIndexProfiles,
-    externalSkills: override.externalSkills ?? base.externalSkills,
-    externalSkillAvailability: override.externalSkillAvailability ?? base.externalSkillAvailability,
+    ...definedSetupOptions(base),
+    ...definedSetupOptions(override),
   };
 }
 
@@ -235,10 +289,11 @@ function toolItems(
   commands: readonly string[],
   requiredCommands: Set<string>,
   commandPresence?: Record<string, boolean>,
+  commandSearchPath?: string,
 ): DevNexusResearchSetupItem[] {
   return commands.map((command) => {
     const required = requiredCommands.has(command);
-    const present = commandExists(command, commandPresence);
+    const present = commandExists(command, commandPresence, commandSearchPath);
     return {
       category,
       id: command,
@@ -359,7 +414,13 @@ export function createDevNexusResearchSetupStatus(
 
   const requiredLatexTools = new Set(options.requiredLatexTools ?? []);
 
-  const latexToolItems = toolItems("latex", latexTools, requiredLatexTools, options.commandPresence);
+  const latexToolItems = toolItems(
+    "latex",
+    latexTools,
+    requiredLatexTools,
+    options.commandPresence,
+    options.commandSearchPath,
+  );
   const localLatexCompilationAvailable = latexToolItems.some(
     (item) => latexCompilationTools.includes(item.id) && item.status === "present",
   );
@@ -384,18 +445,21 @@ export function createDevNexusResearchSetupStatus(
       options.documentExportTools ?? defaultDocumentExportTools,
       requiredSet(options.requiredDocumentExportTools),
       options.commandPresence,
+      options.commandSearchPath,
     ),
     ...toolItems(
       "bibliography",
       options.bibliographyTools ?? defaultBibliographyTools,
       requiredSet(options.requiredBibliographyTools),
       options.commandPresence,
+      options.commandSearchPath,
     ),
     ...toolItems(
       "corpus",
       options.corpusAdapters ?? defaultCorpusAdapters,
       requiredSet(options.requiredCorpusAdapters),
       options.commandPresence,
+      options.commandSearchPath,
     ),
   ];
 

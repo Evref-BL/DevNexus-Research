@@ -1,15 +1,18 @@
+import { chmodSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   devNexusResearchArtifactIds,
   resolveDevNexusResearchArtifactConventions,
-} from "./researchArtifacts.js";
+} from "../src/researchArtifacts.js";
 import {
   createDevNexusResearchSetupStatus,
   createDevNexusResearchSetupStatusFromProjectConfig,
   devNexusResearchProjectExtensionKey,
   devNexusResearchSetupOptionsFromProjectConfig,
   devNexusResearchWorkerBriefing,
-} from "./researchSetup.js";
+} from "../src/researchSetup.js";
 
 describe("DevNexus Research artifact conventions", () => {
   it("renders all baseline artifact conventions with default paths", () => {
@@ -215,6 +218,29 @@ describe("DevNexus Research setup status", () => {
     expect(status.external.find((item) => item.id === "semantic-scholar")?.status).toBe("configured");
     expect(status.external.find((item) => item.id === "external-ars-suite")?.status).toBe("configured");
     expect(status.blockers).toContain("required-external-reviewer is required but missing.");
+  });
+
+  it("detects commands from PATH without invoking shell syntax", () => {
+    const tempDirectory = mkdtempSync(join(tmpdir(), "dev-nexus-research-setup-"));
+    const executableName = process.platform === "win32" ? "latexmk.CMD" : "latexmk";
+    const executablePath = join(tempDirectory, executableName);
+
+    try {
+      writeFileSync(executablePath, "");
+      chmodSync(executablePath, 0o755);
+
+      const status = createDevNexusResearchSetupStatus({
+        commandSearchPath: tempDirectory,
+        documentExportTools: ["pandoc; exit 0"],
+        requiredDocumentExportTools: ["pandoc; exit 0"],
+      });
+
+      expect(status.tools.find((item) => item.id === "latexmk")?.status).toBe("present");
+      expect(status.tools.find((item) => item.id === "pandoc; exit 0")?.status).toBe("required_missing");
+      expect(status.blockers).toContain("pandoc; exit 0 is required but missing.");
+    } finally {
+      rmSync(tempDirectory, { recursive: true, force: true });
+    }
   });
 
   it("ignores removed ARS checkout configuration surfaces", () => {
