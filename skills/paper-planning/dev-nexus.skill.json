@@ -1,0 +1,14 @@
+{
+  "id": "paper-planning",
+  "name": "paper-planning",
+  "description": "Use to plan research-paper structure, argument flow, section intent, and claim placement.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/paper-planning"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

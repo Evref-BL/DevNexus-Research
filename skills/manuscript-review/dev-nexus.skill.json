@@ -1,0 +1,14 @@
+{
+  "id": "manuscript-review",
+  "name": "manuscript-review",
+  "description": "Use for read-only manuscript critique, reviewer risk, and revision opportunities.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/manuscript-review"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

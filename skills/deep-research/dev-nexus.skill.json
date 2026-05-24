@@ -1,0 +1,14 @@
+{
+  "id": "deep-research",
+  "name": "deep-research",
+  "description": "ARS-derived deep research skill for guided scoping, literature review, evidence synthesis, fact-checking, and systematic review work inside DevNexus-Research projects.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/deep-research"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

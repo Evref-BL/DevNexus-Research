@@ -1,0 +1,14 @@
+{
+  "id": "citation-claim-integrity",
+  "name": "citation-claim-integrity",
+  "description": "Use to check whether claims, citations, sources, and bibliography state align.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/citation-claim-integrity"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "academic-paper-reviewer",
+  "name": "academic-paper-reviewer",
+  "description": "ARS-derived manuscript review skill for multi-perspective academic critique, methodology review, revision risk analysis, and re-review in DevNexus-Research.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/academic-paper-reviewer"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "research-artifact-handoff",
+  "name": "research-artifact-handoff",
+  "description": "Use to package research state with artifact inventory, provenance, blockers, and next actions.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/research-artifact-handoff"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

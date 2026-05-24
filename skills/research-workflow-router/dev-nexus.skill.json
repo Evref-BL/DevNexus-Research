@@ -1,0 +1,14 @@
+{
+  "id": "research-workflow-router",
+  "name": "research-workflow-router",
+  "description": "Use to route research tasks to the right DevNexus-Research workflow and artifacts.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/research-workflow-router"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

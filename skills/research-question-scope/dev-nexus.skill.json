@@ -1,0 +1,14 @@
+{
+  "id": "research-question-scope",
+  "name": "research-question-scope",
+  "description": "Use to scope vague research directions into questions, assumptions, and method boundaries.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/research-question-scope"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}
