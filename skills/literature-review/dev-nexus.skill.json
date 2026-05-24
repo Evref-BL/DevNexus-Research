@@ -1,0 +1,14 @@
+{
+  "id": "literature-review",
+  "name": "literature-review",
+  "description": "Use to organize source-backed literature review, synthesis notes, and evidence gaps.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/literature-review"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

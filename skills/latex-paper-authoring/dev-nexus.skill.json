@@ -1,0 +1,14 @@
+{
+  "id": "latex-paper-authoring",
+  "name": "latex-paper-authoring",
+  "description": "Use to draft, edit, inspect, or diagnose LaTeX manuscripts in an approved scope.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/latex-paper-authoring"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

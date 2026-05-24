@@ -1,0 +1,14 @@
+{
+  "id": "academic-paper",
+  "name": "academic-paper",
+  "description": "ARS-derived academic paper writing skill for planning, drafting, revising, citation checking, disclosure, and LaTeX-oriented manuscript work in DevNexus-Research.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/academic-paper"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

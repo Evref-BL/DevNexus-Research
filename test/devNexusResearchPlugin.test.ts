@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -102,6 +102,38 @@ describe("DevNexus Research plugin", () => {
 
     expect(skillCapabilities.map((capability) => capability.skillId)).toEqual([...devNexusResearchSkillIds]);
     expect(skillCapabilities.every((capability) => capability.targetAgents.includes("codex"))).toBe(true);
+  });
+
+  it("packages DevNexus skill manifests for all projected skills", () => {
+    const skillDirectories = readdirSync(resolve("skills"), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort((left, right) => left.localeCompare(right));
+
+    expect(skillDirectories).toEqual([...devNexusResearchSkillIds].sort((left, right) => left.localeCompare(right)));
+
+    for (const skillId of devNexusResearchSkillIds) {
+      const manifestPath = resolve("skills", skillId, "dev-nexus.skill.json");
+      expect(existsSync(manifestPath)).toBe(true);
+
+      const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as {
+        id?: unknown;
+        source?: { uri?: unknown };
+        supportedAgents?: unknown;
+        materialization?: unknown;
+        sourceControl?: unknown;
+      };
+
+      expect(manifest).toMatchObject({
+        id: skillId,
+        source: {
+          uri: `@evref-bl/dev-nexus-research/skills/${skillId}`,
+        },
+        materialization: "copy",
+        sourceControl: "support",
+      });
+      expect(manifest.supportedAgents).toContain("codex");
+    }
   });
 
   it("projects research worker briefing fragments", () => {

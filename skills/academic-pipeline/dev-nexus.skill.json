@@ -1,0 +1,14 @@
+{
+  "id": "academic-pipeline",
+  "name": "academic-pipeline",
+  "description": "ARS-derived academic pipeline orchestrator for research-to-paper workflows, integrity gates, review, revision, and handoff in DevNexus-Research.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/academic-pipeline"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}

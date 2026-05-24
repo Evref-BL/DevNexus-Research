@@ -1,0 +1,14 @@
+{
+  "id": "revision-matrix-planning",
+  "name": "revision-matrix-planning",
+  "description": "Use to convert feedback into a revision matrix, response stance, and action plan.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-4.0",
+  "source": {
+    "type": "local",
+    "uri": "@evref-bl/dev-nexus-research/skills/revision-matrix-planning"
+  },
+  "supportedAgents": ["codex"],
+  "materialization": "copy",
+  "sourceControl": "support"
+}
