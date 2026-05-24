@@ -6,14 +6,14 @@ import {
   devNexusResearchArsCodexRepositoryUrl,
   devNexusResearchArsIntegrationPlanForProvider,
   devNexusResearchArsProviderIntegrations,
-} from "./arsProviderIntegrations.js";
+} from "../src/arsProviderIntegrations.js";
 import {
   devNexusResearchDevNexusPluginConfig,
   devNexusResearchPluginCapabilities,
   devNexusResearchPluginId,
   devNexusResearchPluginName,
   devNexusResearchPluginVersion,
-} from "./devNexusResearchPlugin.js";
+} from "../src/devNexusResearchPlugin.js";
 import {
   devNexusResearchArsNoEndorsementNotice,
   devNexusResearchArsSkillProvenance,
@@ -22,12 +22,12 @@ import {
   devNexusResearchLicense,
   devNexusResearchLicenseTextPath,
   devNexusResearchLicenseUrl,
-} from "./researchSkillProvenance.js";
+} from "../src/researchSkillProvenance.js";
 import {
   devNexusResearchSkillById,
   devNexusResearchSkillIds,
   devNexusResearchSkills,
-} from "./researchSkills.js";
+} from "../src/researchSkills.js";
 
 describe("DevNexus Research plugin", () => {
   it("declares a stable initial plugin identity", () => {

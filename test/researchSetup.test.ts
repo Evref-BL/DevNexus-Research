@@ -5,14 +5,14 @@ import { describe, expect, it } from "vitest";
 import {
   devNexusResearchArtifactIds,
   resolveDevNexusResearchArtifactConventions,
-} from "./researchArtifacts.js";
+} from "../src/researchArtifacts.js";
 import {
   createDevNexusResearchSetupStatus,
   createDevNexusResearchSetupStatusFromProjectConfig,
   devNexusResearchProjectExtensionKey,
   devNexusResearchSetupOptionsFromProjectConfig,
   devNexusResearchWorkerBriefing,
-} from "./researchSetup.js";
+} from "../src/researchSetup.js";
 
 describe("DevNexus Research artifact conventions", () => {
   it("renders all baseline artifact conventions with default paths", () => {

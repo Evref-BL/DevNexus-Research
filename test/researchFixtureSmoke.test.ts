@@ -6,13 +6,13 @@ import {
   validateProjectConfig,
   type NexusProjectConfig,
 } from "dev-nexus";
-import { devNexusResearchDevNexusPluginConfig } from "./devNexusResearchPlugin.js";
+import { devNexusResearchDevNexusPluginConfig } from "../src/devNexusResearchPlugin.js";
 import {
   createDevNexusResearchSetupStatusFromProjectConfig,
   devNexusResearchProjectExtensionKey,
   devNexusResearchSetupOptionsFromProjectConfig,
   devNexusResearchWorkerBriefing,
-} from "./researchSetup.js";
+} from "../src/researchSetup.js";
 
 interface DevNexusResearchFixtureExtension {
   materialPolicy: {
