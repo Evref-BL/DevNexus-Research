@@ -34,7 +34,9 @@ Code targets should use the upstream `academic-research-skills` plugin as-is,
 Codex targets should prefer the `academic-research-suite` skill from
 `Imbad0202/academic-research-skills-codex`, and the bundled ARS-derived
 DevNexus-Research skills remain the fallback when no native or shim package is
-available.
+available. Those provider options are exported as generic DevNexus
+`agent_package` capabilities so core can project package setup guidance without
+hardcoding Research or ARS knowledge.
 
 The package ships a synthetic fixture project at
 `fixtures/synthetic-research-project/`. The fixture enables the plugin,
@@ -76,6 +78,9 @@ Current state:
 - A typed provider integration registry records Claude Code native plugin,
   Codex native skill-suite, planned OpenCode shim, and bundled fallback
   behavior with license and no-endorsement metadata.
+- The same registry maps to generic DevNexus `agent_package` capabilities for
+  provider-native package setup once the active DevNexus core supports that
+  capability kind.
 - A synthetic research project fixture is included for smoke testing setup
   status, worker briefing, artifact paths, and minimal LaTeX authoring paths
   without private material or external services.
