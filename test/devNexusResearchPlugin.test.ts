@@ -12,6 +12,7 @@ import {
   devNexusResearchArsProviderIntegrations,
 } from "../src/arsProviderIntegrations.js";
 import {
+  devNexusResearchAgentPackageCapabilities,
   devNexusResearchDevNexusPluginConfig,
   devNexusResearchPluginCapabilities,
   devNexusResearchPluginId,
@@ -60,6 +61,7 @@ describe("DevNexus Research plugin", () => {
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("setup_obligation");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("environment_hint");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("agent_affordance");
+    expect(projection.capabilities.map((capability) => capability.kind)).toContain("agent_package");
     expect(projection.capabilities.map((capability) => capability.kind)).toContain("worker_briefing_fragment");
   });
 
@@ -202,6 +204,60 @@ describe("DevNexus Research plugin", () => {
       expect(integration.licenseUrl).toBe(devNexusResearchLicenseUrl);
       expect(integration.noEndorsementNotice).toBe(devNexusResearchArsNoEndorsementNotice);
     }
+  });
+
+  it("maps ARS provider integrations onto generic agent package capabilities", () => {
+    expect(
+      devNexusResearchAgentPackageCapabilities().map((capability) => ({
+        id: capability.id,
+        packageKind: capability.packageKind,
+        packageName: capability.packageName,
+        targetAgents: capability.targetAgents,
+        license: capability.license,
+      })),
+    ).toEqual([
+      {
+        id: "agent-package:ars-claude-native-plugin",
+        packageKind: "native",
+        packageName: "academic-research-skills",
+        targetAgents: ["claude"],
+        license: devNexusResearchLicense,
+      },
+      {
+        id: "agent-package:ars-codex-suite-skill",
+        packageKind: "native",
+        packageName: "academic-research-suite",
+        targetAgents: ["codex"],
+        license: devNexusResearchLicense,
+      },
+      {
+        id: "agent-package:ars-opencode-shim-planned",
+        packageKind: "manual_guidance",
+        packageName: "ars-opencode-shim-planned",
+        targetAgents: ["opencode"],
+        license: devNexusResearchLicense,
+      },
+      {
+        id: "agent-package:dev-nexus-research-ars-bundled-fallback",
+        packageKind: "bundled_fallback",
+        packageName: "dev-nexus-research-ars-bundled-fallback",
+        targetAgents: ["manual", "custom"],
+        license: devNexusResearchLicense,
+      },
+    ]);
+
+    expect(
+      devNexusResearchAgentPackageCapabilities().find(
+        (capability) => capability.id === "agent-package:ars-claude-native-plugin",
+      ),
+    ).toMatchObject({
+      repositoryUrl: devNexusResearchArsUpstreamRepositoryUrl,
+      installCommand:
+        "/plugin marketplace add Imbad0202/academic-research-skills && /plugin install academic-research-skills",
+      checkCommand: "/plugin list",
+      surfaces: expect.arrayContaining(["commands", "hooks", "skills"]),
+      provenance: "DevNexus Research ARS provider integration registry",
+    });
   });
 
   it("exports skill registry records that match the source tree", () => {

@@ -1,5 +1,12 @@
 import type { NexusPluginCapabilityRecord, NexusProjectPluginConfig } from "dev-nexus";
-import { devNexusResearchArsCodexRepositoryUrl } from "./arsProviderIntegrations.js";
+import {
+  devNexusResearchArsCodexRepositoryUrl,
+  devNexusResearchArsProviderIntegrations,
+  type DevNexusResearchAgentProvider,
+  type DevNexusResearchArsIntegrationKind,
+  type DevNexusResearchArsProviderIntegration,
+  type DevNexusResearchArsSurface,
+} from "./arsProviderIntegrations.js";
 import {
   devNexusResearchArsNoEndorsementNotice,
   devNexusResearchArsUpstreamCommit,
@@ -12,11 +19,52 @@ export const devNexusResearchPluginId = "dev-nexus-research";
 export const devNexusResearchPluginName = "DevNexus Research";
 export const devNexusResearchPluginVersion = "0.1.0-alpha.0";
 
+export type DevNexusResearchAgentPackageKind =
+  | "native"
+  | "shim"
+  | "bundled_fallback"
+  | "manual_guidance";
+
+export type DevNexusResearchAgentPackageSurface =
+  | "skills"
+  | "commands"
+  | "hooks"
+  | "mcp"
+  | "scripts"
+  | "adapters"
+  | "schemas"
+  | "templates"
+  | "examples"
+  | "tests"
+  | "references";
+
+export interface DevNexusResearchAgentPackageCapability {
+  kind: "agent_package";
+  id: string;
+  description: string;
+  packageKind: DevNexusResearchAgentPackageKind;
+  packageName: string;
+  repositoryUrl?: string;
+  installCommand?: string;
+  checkCommand?: string;
+  versionPolicy?: string;
+  license: string;
+  provenance: string;
+  required: false;
+  targetAgents: DevNexusResearchAgentProvider[];
+  surfaces: DevNexusResearchAgentPackageSurface[];
+  setupInstructions: string[];
+}
+
+export type DevNexusResearchPluginCapability =
+  | NexusPluginCapabilityRecord
+  | DevNexusResearchAgentPackageCapability;
+
 function paragraph(...sentences: string[]): string {
   return sentences.join(" ");
 }
 
-export const devNexusResearchPluginCapabilities: NexusPluginCapabilityRecord[] = [
+export const devNexusResearchPluginCapabilities: DevNexusResearchPluginCapability[] = [
   ...devNexusResearchSkills.map(
     (skill): NexusPluginCapabilityRecord => ({
       kind: "projected_skill",
@@ -26,6 +74,7 @@ export const devNexusResearchPluginCapabilities: NexusPluginCapabilityRecord[] =
       targetAgents: ["codex"],
     }),
   ),
+  ...devNexusResearchAgentPackageCapabilities(),
   {
     kind: "dependency_projection",
     id: "node-modules",
@@ -215,6 +264,153 @@ export function devNexusResearchDevNexusPluginConfig(): NexusProjectPluginConfig
     name: devNexusResearchPluginName,
     version: devNexusResearchPluginVersion,
     enabled: true,
-    capabilities: devNexusResearchPluginCapabilities,
+    capabilities:
+      devNexusResearchPluginCapabilities as NexusProjectPluginConfig["capabilities"],
   };
+}
+
+export function devNexusResearchAgentPackageCapabilities(): DevNexusResearchAgentPackageCapability[] {
+  return [...devNexusResearchArsProviderIntegrations]
+    .sort((left, right) => left.priority - right.priority || left.id.localeCompare(right.id))
+    .map((integration) => devNexusResearchAgentPackageCapability(integration));
+}
+
+function devNexusResearchAgentPackageCapability(
+  integration: DevNexusResearchArsProviderIntegration,
+): DevNexusResearchAgentPackageCapability {
+  const installCommand = agentPackageInstallCommand(integration);
+  const checkCommand = agentPackageCheckCommand(integration.provider);
+
+  return {
+    kind: "agent_package",
+    id: `agent-package:${integration.id}`,
+    description: agentPackageDescription(integration),
+    packageKind: agentPackageKind(integration.kind),
+    packageName: agentPackageName(integration),
+    repositoryUrl: integration.sourceRepositoryUrl,
+    ...(installCommand ? { installCommand } : {}),
+    ...(checkCommand ? { checkCommand } : {}),
+    versionPolicy: agentPackageVersionPolicy(integration),
+    license: integration.license,
+    provenance: "DevNexus Research ARS provider integration registry",
+    required: false,
+    targetAgents: agentPackageTargetAgents(integration),
+    surfaces: agentPackageSurfaces(integration.surfaces),
+    setupInstructions: agentPackageSetupInstructions(integration),
+  };
+}
+
+function agentPackageKind(
+  kind: DevNexusResearchArsIntegrationKind,
+): DevNexusResearchAgentPackageKind {
+  switch (kind) {
+    case "provider_native_plugin":
+    case "provider_native_skill_suite":
+      return "native";
+    case "provider_shim_planned":
+      return "manual_guidance";
+    case "bundled_fallback":
+      return "bundled_fallback";
+  }
+}
+
+function agentPackageName(
+  integration: DevNexusResearchArsProviderIntegration,
+): string {
+  return (
+    integration.nativePluginName ??
+    integration.nativeSkillId ??
+    (integration.kind === "bundled_fallback"
+      ? "dev-nexus-research-ars-bundled-fallback"
+      : integration.id)
+  );
+}
+
+function agentPackageDescription(
+  integration: DevNexusResearchArsProviderIntegration,
+): string {
+  return paragraph(
+    `${integration.providerLabel}: ${integration.name}.`,
+    integration.notes[0] ?? "Use this ARS package option when it matches the active agent provider.",
+  );
+}
+
+function agentPackageInstallCommand(
+  integration: DevNexusResearchArsProviderIntegration,
+): string | null {
+  return integration.installCommands.length > 0
+    ? integration.installCommands.join(" && ")
+    : null;
+}
+
+function agentPackageCheckCommand(
+  provider: DevNexusResearchAgentProvider,
+): string | null {
+  switch (provider) {
+    case "claude":
+      return "/plugin list";
+    case "codex":
+      return "codex skill list";
+    default:
+      return null;
+  }
+}
+
+function agentPackageVersionPolicy(
+  integration: DevNexusResearchArsProviderIntegration,
+): string {
+  if (integration.status === "planned") {
+    return "Review manually until a provider-native package is inspected.";
+  }
+  if (integration.observedVersion) {
+    return `Observed ${integration.observedVersion}; review upstream releases before upgrading.`;
+  }
+  return "Bundled fallback follows the DevNexus-Research package version.";
+}
+
+function agentPackageTargetAgents(
+  integration: DevNexusResearchArsProviderIntegration,
+): DevNexusResearchAgentProvider[] {
+  return integration.kind === "bundled_fallback"
+    ? ["manual", "custom"]
+    : [integration.provider];
+}
+
+function agentPackageSurfaces(
+  surfaces: readonly DevNexusResearchArsSurface[],
+): DevNexusResearchAgentPackageSurface[] {
+  const supported = new Set<string>([
+    "skills",
+    "commands",
+    "hooks",
+    "scripts",
+    "adapters",
+    "schemas",
+    "templates",
+    "examples",
+    "tests",
+    "references",
+  ]);
+
+  return [
+    ...new Set(
+      surfaces.filter(
+        (
+          surface,
+        ): surface is Extract<
+          DevNexusResearchArsSurface,
+          DevNexusResearchAgentPackageSurface
+        > => supported.has(surface),
+      ),
+    ),
+  ].sort();
+}
+
+function agentPackageSetupInstructions(
+  integration: DevNexusResearchArsProviderIntegration,
+): string[] {
+  return [
+    "Confirm the project accepts the noncommercial ARS license before enabling this package option.",
+    ...integration.notes,
+  ];
 }
